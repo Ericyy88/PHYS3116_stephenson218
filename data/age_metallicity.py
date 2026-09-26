@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 data = pd.read_csv("vandenBerg_table2.csv")
 
 #Plotting age vs cluster 
-fig,ax = plt.read_csv(figsize = (8,5))
+fig, ax = plt.subplots(figsize=(8, 5))
 #uncertainties
 ax.errorbar(
     data["FeH"],
@@ -13,12 +13,13 @@ ax.errorbar(
     fmt = "o",
     markersize = 4,
     capsize = 3,
-    colour = "navy",
-    ecolour = "lightgray",
+    color = "navy",
+    ecolor = "lightgray",
     elinewidth = 1,
 )
 
 ax.set_xlabel("[Fe/H]")
 ax.set_ylabel("Age (Gyr)")
 ax.set_title("Age vs Metallicity of Clusters")
-ax.grid(apha = 0.25)
+ax.grid(alpha = 0.25)
+plt.show()
