@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("vandenBerg_table2.csv")
+data = pd.read_csv("data/vandenBerg_table2.csv")
 
 #define x and y values
 x = data["FeH"]                                     #defining x as the metallicity values from the data
