@@ -1,0 +1,30 @@
+1. Dataset and method
+- Dataset: VandenBerg et al. (2013), Table 2.
+- Columns used: FeH, Age and Age_err.
+- Number of analysed clusters: 55
+- Fitting method: Unweighted linear method
+- Fitted equation: y = -1.0352483486568858x + 10.39286663132806
+- Residual definition: measured - fitted age
+
+2. Age-metallicity graph
+- Overall trend: There was a moderately negative trend 
+- Meaning of the fitted slope: Predicted age = 10.393 - 1.035[Fe/H]
+- Scatter: From the plot the data is generally quite spread out however towards the beginning of the dataset there is a noticable spread of age for galaxy clusters with similar metallicity.
+- Notable clusters: 1. PAL-12. 2. NGC-6362. 3. NGC-362. 4. NGC-6723. 5. NGC-1261
+
+3. Residual graph
+- RMS residual: RMS = 0.56 Gyr
+- Largest negative residual: 
+- Largest positive residual: 
+- Residual pattern:
+- Uncertainties:
+
+4. Effect of PAL-12
+- Fit using all clusters:
+- Fit excluding PAL-12:
+- Comparison:
+
+5. Inerpretations
+- What the analysis suggests:
+- Limitations:
+- Clusters to investiage:
