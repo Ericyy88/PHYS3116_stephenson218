@@ -9,7 +9,6 @@ outliers = pd.read_csv("outlier_clusters.csv")
 #define x and y values
 x = data1["FeH"]                                     #defining x as the metallicity values from the data
 y = data2["R_gc"]   
-is_outlier = data2['Name'].isin(outliers['#NGC'])
 
 data = pd.merge(
     x,

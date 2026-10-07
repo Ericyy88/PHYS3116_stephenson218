@@ -15,4 +15,5 @@ ax.set_ylabel("v_LSR (km/s)")
 ax.set_title("Velocity vs Radial Velocity of Clusters")
 ax.grid(alpha = 0.25)
 
+
 plt.show()
