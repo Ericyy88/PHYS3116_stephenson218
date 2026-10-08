@@ -61,3 +61,6 @@ outliers = outliers.sort_values("abs_z", ascending=False)   #sorting data by dec
 print(outliers.head(10))                                    #showing the 10 largest outliers in the data
 
 plt.show()
+
+rms = np.sqrt(np.mean(residuals**2))
+print("RMS residual:", rms, "Gyr")
