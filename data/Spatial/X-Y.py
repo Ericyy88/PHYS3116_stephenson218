@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("data/HarrisPartI.csv")
+data = pd.read_csv("data/HarrisPartI_standardized.csv")
 outer = pd.read_csv("data/outer_gcs.csv")
 
 x = data["X"]                                    

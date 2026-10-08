@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("data/HarrisPartI.csv")
+data = pd.read_csv("data/HarrisPartI_standardized.csv")
 
 x = data["Z"]                                    
 y = data["R_gc"]   
@@ -21,8 +21,9 @@ outer = data[
     (data["R_gc"] > 30) |
     (np.abs(data["Z"]) > 20)
 ]
-
-outer.to_csv("data/outer_gcs.csv", index=False)
+outer[["ID"]].to_csv(
+    "Spatial_outliers.csv", index=False
+)
 
 
 print(outer[["ID", "Name", "R_gc", "X", "Y", "Z"]])
