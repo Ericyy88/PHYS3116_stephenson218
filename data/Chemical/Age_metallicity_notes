@@ -17,14 +17,35 @@
 - Largest negative residual: -2.23 Gyr
 - Largest positive residual: +1.23 Gyr
 - Residual pattern: 
+i) The plot is unevenly scattered around the zero axis. There is no curve across the full metalicity range.
+ii)There is one outlier. 
+iii) The spread is wider around [Fe/H] := -1.3 to -1.0.
 - Uncertainties:
+i) Some of the clusters have error bars that cross zero. This implies that their quoted age range includes the fitted prediction. 
+ii) Other plots in particular PAL-12 remain displaced from zero across the whole error bar.
 
 4. Effect of PAL-12
-- Fit using all clusters:
+- Fit using all clusters: 
 - Fit excluding PAL-12:
 - Comparison:
 
 5. Inerpretations
 - What the analysis suggests:
-- Limitations:
+i) There is a broad negative age-metallicity relationship. For the 55 cluster sample, the unweighted fitted slope's gradient is around -1.04 Gyr/dex. 
+ii) Clusters that are more metal-rich tend to be younger.
+iii) Some clusters differ substantially from the average trend
+iv) PAL-12 is the clearest unusal point. 
+v) 
+- Limitations: 
+1. The listed ages depend on assumptions about distance, chemical composition and stellar models. 
+2. Uncertainties in metallicity affect the predicted age as well. 
+3. A single straight line of best fit can oversimplify the relationship. If a larger sample size is used it may significatly reduce the effectiveness of using a straight line to represent the relationship. 
+4. PAL-12 has a noticiable effect on the overall relationship. This can be seen when it is removed where the RMS is reduced from 0.56 down to 0.47.
+5. Regions that have fewer points would provide weaker evidence about the underlying relationship. 
+
 - Clusters to investiage:
+1. PAL-12
+2. NGC-6362
+3. NGC-362
+4. NGC-6732
+5. NGC-1261
