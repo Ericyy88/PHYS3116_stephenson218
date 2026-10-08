@@ -60,8 +60,10 @@ outliers = data[
 outliers = outliers.sort_values("abs_z", ascending=False)   #sorting data by decending order of absolute standardized residuals
 print(outliers.head(10))                                    #showing the 10 largest outliers in the data
 
-
 outlier = data[data['abs_z'] > 2].copy()
 outlier[['#NGC']].to_csv("outlier_clusters.csv", index=False)
 
 plt.show()
+
+rms = np.sqrt(np.mean(residuals**2))
+print("RMS residual:", rms, "Gyr")
