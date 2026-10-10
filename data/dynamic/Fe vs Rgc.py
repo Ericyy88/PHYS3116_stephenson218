@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data1 = pd.read_csv("data/vandenBerg_table2.csv")
-data2 = pd.read_csv("data/HarrisPartI.csv")
+data1 = pd.read_csv("data/vandenBerg_table2_standardized.csv")
+data2 = pd.read_csv("data/HarrisPartI_standardized.csv")
 outliers = pd.read_csv("outlier_clusters.csv")
 
 #define x and y values

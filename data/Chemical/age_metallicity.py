@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = pd.read_csv("data/vandenBerg_table2.csv")
+data = pd.read_csv("data/vandenBerg_table2_standardized.csv")
 
 #define x and y values
 x = data["FeH"]                                     #defining x as the metallicity values from the data
@@ -55,15 +55,13 @@ data["Residual"] = residual
 data["z_residual"] = data["Residual"] / data["Age_err"]     #standardized residuals
 data["abs_z"] = data["z_residual"].abs()                #absolute value of standardized residuals
 outliers = data[
-    ["#NGC", "Name", "FeH", "Age", "Age_err", "Predicted_Age", "Residual", "z_residual", "abs_z"]
+    ["ID", "FeH", "Age", "Predicted_Age", "Residual", "abs_z"]
 ]                                                           #variables of outliers table
-outliers = outliers.sort_values("abs_z", ascending=False)   #sorting data by decending order of absolute standardized residuals
+age_outliers = outliers.sort_values("abs_z", ascending=False)   #sorting data by decending order of absolute standardized residuals
 print(outliers.head(10))                                    #showing the 10 largest outliers in the data
 
-outlier = data[data['abs_z'] > 2].copy()
-outlier[['#NGC']].to_csv("outlier_clusters.csv", index=False)
+age_outlier = data[data['abs_z'] > 2].copy()
+age_outlier[['ID']].to_csv("Age_outliers.csv", index=False)
 
 plt.show()
 
-rms = np.sqrt(np.mean(residuals**2))
-print("RMS residual:", rms, "Gyr")

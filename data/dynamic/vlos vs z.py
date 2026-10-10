@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data1 = pd.read_csv("data/HarrisPartI.csv")
-data2 = pd.read_csv("data/HarrisPartIII.csv")
+data1 = pd.read_csv("data/HarrisPartI_standardized.csv")
+data2 = pd.read_csv("data/HarrisPartIII_standardized.csv")
 
 #define x and y values
 x = data1["Z"]                                   

@@ -2,14 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-data1 = pd.read_csv("data/HarrisPartI.csv")
-data2 = pd.read_csv("data/HarrisPartIII.csv")
+data1 = pd.read_csv("data/HarrisPartI_standardized.csv")
+data2 = pd.read_csv("data/HarrisPartIII_standardized.csv")
 
 #define x and y values
 x = data1["R_gc"]                                     #defining x as the metallicity values from the data
 y = data2["v_LSR"]   
 data = pd.merge(
-    data1[["ID", "Name", "R_gc"]],
+    data1[["ID", "R_gc"]],
     data2[["ID", "v_LSR"]],
     on="ID",
     how="inner"
@@ -23,13 +23,11 @@ ax.grid(alpha = 0.25)
 
 data["abs_v"] = data["v_LSR"].abs() 
 suspect = data[
-    ["ID", "Name", "v_LSR", "R_gc", "abs_v"]
+    ["ID", "v_LSR", "R_gc", "abs_v"]
 ]                                                           #variables of outliers table
 suspect = suspect.sort_values("abs_v", ascending=False)   #sorting data by decending order of absolute standardized residuals
 print(suspect.head(10))                                    #showing the 10 largest outliers in the data
 
-
-outlier = data[data['abs_v'] > 2].copy()
-outlier[['ID']].to_csv("outlier_clusters.csv", index=False)
+suspect[["ID"]].to_csv("velocity_outliers.csv", index=False)
 
 plt.show()                  
