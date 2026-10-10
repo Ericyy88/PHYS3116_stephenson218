@@ -21,13 +21,27 @@ ax.set_ylabel("v_LSR (km/s)")
 ax.set_title("Velocity vs Galactocentric Radius of Clusters")
 ax.grid(alpha = 0.25)
 
-data["abs_v"] = data["v_LSR"].abs() 
-suspect = data[
+
+# Calculate absolute velocity
+data["abs_v"] = data["v_LSR"].abs()
+
+# Rank clusters by absolute velocity
+ranked = data.sort_values("abs_v", ascending=False)
+
+# Select top 20 velocity outliers
+velocity_outliers = ranked.head(20).copy()
+
+print("\nTop 20 Velocity Outliers:")
+print(velocity_outliers[
     ["ID", "v_LSR", "R_gc", "abs_v"]
-]                                                           #variables of outliers table
-suspect = suspect.sort_values("abs_v", ascending=False)   #sorting data by decending order of absolute standardized residuals
-print(suspect.head(10))                                    #showing the 10 largest outliers in the data
+].to_string(index=False))
 
-suspect[["ID"]].to_csv("velocity_outliers.csv", index=False)
+# Save top 20 cluster IDs
+velocity_outliers[["ID"]].to_csv(
+    "Velocity_outliers.csv", index=False
+)
 
-plt.show()                  
+
+plt.show()     
+
+

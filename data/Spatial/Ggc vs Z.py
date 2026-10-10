@@ -18,7 +18,7 @@ ax.grid(alpha=0.25)
 ax.scatter(0, 0, marker="x", s=100, label="Galactic Centre")
 
 outer = data[
-    (data["R_gc"] > 30) |
+    (data["R_gc"] > 20) |
     (np.abs(data["Z"]) > 20)
 ]
 outer[["ID"]].to_csv(

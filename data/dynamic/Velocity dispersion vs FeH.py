@@ -45,10 +45,10 @@ data["abs_z"] = data["z_residual"].abs()
 # Rank all clusters by residual magnitude
 ranked = data.sort_values("abs_z", ascending=False)
 
-# Select top 10 clusters with largest absolute residuals
-sig_v_outliers = ranked.head(10).copy()
+# Select top 20 clusters with largest absolute residuals
+sig_v_outliers = ranked.head(20).copy()
 
-print("\nTop 10 outliers:")
+print("\nTop 20 outliers:")
 print(sig_v_outliers[
     ["ID", "FeH", "Mstar", "sig_v2", "residual", "abs_z"]
 ])

@@ -35,8 +35,6 @@ x_fit = np.linspace(x.min(), x.max(), 100)
 y_fit = m * x_fit + b                       #equation of the line        
 ax.plot(x_fit, y_fit, label="Linear fit")   #plotting the line of best fit
 ax.legend()
-print("Slope =", m)
-print("Intercept =", b)
 
 #residual plot
 predicted_age = m * x + b                   #predicted ages based on the linear fit
@@ -49,19 +47,29 @@ ax2.set_title("Residuals of Age vs Metallicity")
 ax2.grid(alpha=0.25)
 ax2.axhline(0)
 
-#table of residuals
-data["Predicted_Age"] = predicted_age          #storing predicted ages and residuals to data
+# Table of residuals
+data["Predicted_Age"] = predicted_age
 data["Residual"] = residual
-data["z_residual"] = data["Residual"] / data["Age_err"]     #standardized residuals
-data["abs_z"] = data["z_residual"].abs()                #absolute value of standardized residuals
-outliers = data[
-    ["ID", "FeH", "Age", "Predicted_Age", "Residual", "abs_z"]
-]                                                           #variables of outliers table
-age_outliers = outliers.sort_values("abs_z", ascending=False)   #sorting data by decending order of absolute standardized residuals
-print(outliers.head(10))                                    #showing the 10 largest outliers in the data
 
-age_outlier = data[data['abs_z'] > 2].copy()
-age_outlier[['ID']].to_csv("Age_outliers.csv", index=False)
+# Standardised residuals
+data["z_residual"] = data["Residual"] / data["Age_err"]
+data["abs_z"] = data["z_residual"].abs()
+
+# Rank all clusters by largest absolute standardised residual
+ranked = data.sort_values("abs_z", ascending=False)
+
+# Select top 10 outliers
+age_outliers = ranked.head(20).copy()
+
+print("\nTop 20 Age-Metallicity Outliers:")
+print(age_outliers[
+    ["ID", "FeH", "Age", "Predicted_Age", "Residual", "abs_z"]
+].to_string(index=False))
+
+# Save top 20 cluster IDs
+age_outliers[["ID"]].to_csv(
+    "Age_outliers.csv", index=False
+)
 
 plt.show()
 
