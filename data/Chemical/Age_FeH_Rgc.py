@@ -2,8 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
-from scipy.stats import mannwhitneyu
+from adjustText import adjust_text
 
 # Import datasets
 data1 = pd.read_csv("data/vandenBerg_table2_standardized.csv")
@@ -74,15 +73,40 @@ ax.scatter(
     label="High |v_LSR| clusters"
 )
 
-# Label highlighted clusters
+
+
+texts = []
+
 for _, row in outliers.iterrows():
-    ax.annotate(
-        row["ID"],
-        (row["FeH"], row["Age"]),
-        xytext=(5, 5),
-        textcoords="offset points",
-        fontsize=8
+    ax.scatter(
+        row["FeH"],
+        row["Age"],
+        facecolors="none",
+        edgecolors="red",
+        s=250,
+        linewidths=2,
+        zorder=5
     )
+
+    texts.append(
+        ax.text(
+            row["FeH"],
+            row["Age"],
+            row["ID"],
+            fontsize=9
+        )
+    )
+
+# Automatically prevent labels from overlapping
+adjust_text(
+    texts,
+    ax=ax,
+    arrowprops=dict(
+        arrowstyle="-",
+        color="gray",
+        lw=0.7
+    )
+)
 
 # Colour bar
 cbar = plt.colorbar(sc, ax=ax)
@@ -99,33 +123,8 @@ data["age_outlier"] = data["ID"].isin(
     pd.read_csv("Age_outliers.csv")["ID"]
 )
 
-fig, ax = plt.subplots(figsize=(7, 5))
-
-ax.boxplot(
-    [
-        data.loc[~data["age_outlier"], "R_gc"],
-        data.loc[data["age_outlier"], "R_gc"]
-    ],
-    tick_labels=["Other clusters", "Age outliers"]
-)
-
-ax.set_ylabel("Galactocentric Distance (kpc)")
-ax.set_title("Galactocentric Distance by Age-Metallicity Group")
-ax.grid(axis="y", alpha=0.25)
 
 
-
-normal = data.loc[~data["age_outlier"], "R_gc"]
-outliers = data.loc[data["age_outlier"], "R_gc"]
-
-stat, p = mannwhitneyu(
-    normal,
-    outliers,
-    alternative="two-sided"
-)
-
-print("Mann–Whitney U:", stat)
-print("p-value:", p)
 
 plt.show()
 
