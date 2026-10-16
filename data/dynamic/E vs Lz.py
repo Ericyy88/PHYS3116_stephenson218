@@ -22,6 +22,10 @@ velocity_outliers = pd.read_csv(
     folder.parent.parent / "Velocity_outliers.csv"
 )
 
+dispersion_outliers = pd.read_csv(
+    folder.parent.parent / "Sig_v_outliers.csv"
+)
+
 # Standardise cluster identifiers
 def standardise_id(series):
     return (
@@ -38,6 +42,9 @@ age_outliers["match_id"] = standardise_id(age_outliers["ID"])
 velocity_outliers["match_id"] = standardise_id(
     velocity_outliers["ID"]
 )
+dispersion_outliers["match_id"] = standardise_id(
+    dispersion_outliers["ID"]
+)
 
 print("\nOrbital catalogue IDs:")
 print(data["ID"].head(20).tolist())
@@ -47,20 +54,47 @@ print(age_outliers["ID"].head(20).tolist())
 
 print("\nVelocity dispersion outlier IDs:")
 print(velocity_outliers["ID"].head(20).tolist())
+
+print("\nVelocity dispersion outlier IDs:")
+print(dispersion_outliers["ID"].head(20).tolist())
 # --------------------------------------------------
 # 2. Identify outlier groups
 # --------------------------------------------------
 
 age_ids = set(age_outliers["match_id"])
 velocity_ids = set(velocity_outliers["match_id"])
+dispersion_ids = set(dispersion_outliers["match_id"])
 
 data["Age_outlier"] = data["match_id"].isin(age_ids)
 data["Velocity_outlier"] = data["match_id"].isin(velocity_ids)
+data["Dispersion_outlier"] = data["match_id"].isin(dispersion_ids)
 
-both = data["Age_outlier"] & data["Velocity_outlier"]
-age_only = data["Age_outlier"] & ~data["Velocity_outlier"]
-velocity_only = ~data["Age_outlier"] & data["Velocity_outlier"]
-normal = ~data["Age_outlier"] & ~data["Velocity_outlier"]
+# Number of outlier lists containing each cluster
+data["Outlier_count"] = (
+    data["Age_outlier"].astype(int)
+    + data["Velocity_outlier"].astype(int)
+    + data["Dispersion_outlier"].astype(int)
+)
+
+normal = data["Outlier_count"] == 0
+
+age_only = (
+    data["Age_outlier"]
+    & (data["Outlier_count"] == 1)
+)
+
+velocity_only = (
+    data["Velocity_outlier"]
+    & (data["Outlier_count"] == 1)
+)
+
+dispersion_only = (
+    data["Dispersion_outlier"]
+    & (data["Outlier_count"] == 1)
+)
+
+two_groups = data["Outlier_count"] == 2
+all_three = data["Outlier_count"] == 3
 
 # --------------------------------------------------
 # 3. Scale orbital variables
@@ -73,75 +107,63 @@ data["E_scaled"] = data["E_km2_s2"] / 100000
 # 4. Plot orbital energy against angular momentum
 # --------------------------------------------------
 
-fig, ax = plt.subplots(figsize=(12, 7))
+fig, ax = plt.subplots(figsize=(14, 9))
 
-# Normal clusters
-ax.scatter(
-    data.loc[normal, "Lz_scaled"],
-    data.loc[normal, "E_scaled"],
-    s=30,
-    color="lightgray",
-    alpha=0.6,
-    label="Other clusters",
-    zorder=1
-)
+groups = [
+    (normal, "Other clusters", "lightgray", "o", 30),
+    (age_only, "Age-metallicity only", "royalblue", "o", 85),
+    (velocity_only, "Velocity only", "tomato", "o", 85),
+    (dispersion_only, "Dispersion only", "orange", "o", 85),
+    (two_groups, "Two outlier groups", "purple", "D", 120),
+    (all_three, "All three groups", "gold", "*", 200),
+]
 
-# Age-metallicity outliers only
-ax.scatter(
-    data.loc[age_only, "Lz_scaled"],
-    data.loc[age_only, "E_scaled"],
-    s=85,
-    color="royalblue",
-    edgecolors="black",
-    linewidths=0.5,
-    label="Age-metallicity outliers",
-    zorder=3
-)
-
-# Velocity outliers only
-ax.scatter(
-    data.loc[velocity_only, "Lz_scaled"],
-    data.loc[velocity_only, "E_scaled"],
-    s=85,
-    color="tomato",
-    edgecolors="black",
-    linewidths=0.5,
-    label="Velocity outliers",
-    zorder=3
-)
-
-# Clusters appearing in BOTH lists
-ax.scatter(
-    data.loc[both, "Lz_scaled"],
-    data.loc[both, "E_scaled"],
-    s=170,
-    marker="*",
-    color="gold",
-    edgecolors="black",
-    linewidths=0.8,
-    label="Both outlier groups",
-    zorder=5
-)
+for mask, label, color, marker, size in groups:
+    ax.scatter(
+        data.loc[mask, "Lz_scaled"],
+        data.loc[mask, "E_scaled"],
+        s=size,
+        color=color,
+        marker=marker,
+        edgecolors="black" if label != "Other clusters" else "none",
+        linewidths=0.5,
+        alpha=0.85,
+        label=label,
+        zorder=5 if label == "All three groups" else 3
+    )
 
 # --------------------------------------------------
-# 5. Annotate overlapping clusters
+# 5. Annotate all outlier clusters
 # --------------------------------------------------
 
-for _, row in data.loc[both].iterrows():
+from adjustText import adjust_text
 
-    ax.annotate(
+texts = []
+
+outlier_data = data.loc[data["Outlier_count"] >= 1]
+
+for _, row in outlier_data.iterrows():
+
+    txt = ax.text(
+        row["Lz_scaled"],
+        row["E_scaled"],
         row["ID"],
-        xy=(row["Lz_scaled"], row["E_scaled"]),
-        xytext=(8, 8),
-        textcoords="offset points",
-        fontsize=9,
-        arrowprops=dict(
-            arrowstyle="-",
-            color="gray",
-            lw=0.7
-        ),
+        fontsize=8,
+        fontweight="bold" if row["Outlier_count"] >= 2 else "normal",
         zorder=6
     )
+
+    texts.append(txt)
+
+adjust_text(
+    texts,
+    ax=ax,
+    arrowprops=dict(
+        arrowstyle="-",
+        color="gray",
+        lw=0.6
+    )
+)
 
 # --------------------------------------------------
 # 6. Formatting
@@ -195,27 +217,40 @@ plt.tight_layout()
 # 7. Print overlapping clusters
 # --------------------------------------------------
 
-overlap_clusters = data.loc[
-    both,
-    ["ID", "Lz_kpc_km_s", "E_km2_s2"]
-].copy()
+print("\nClusters appearing in ALL THREE lists:")
+print(
+    data.loc[
+        all_three,
+        ["ID", "Lz_kpc_km_s", "E_km2_s2"]
+    ].to_string(index=False)
+)
 
-print("\nClusters appearing in BOTH outlier lists:")
-print(overlap_clusters.to_string(index=False))
+print("\nClusters appearing in TWO lists:")
+print(
+    data.loc[
+        two_groups,
+        [
+            "ID",
+            "Age_outlier",
+            "Velocity_outlier",
+            "Dispersion_outlier"
+        ]
+    ].to_string(index=False)
+)
 
 print("\nNumber of clusters in each category:")
 print(f"Normal: {normal.sum()}")
 print(f"Age only: {age_only.sum()}")
 print(f"Velocity only: {velocity_only.sum()}")
-print(f"Both: {both.sum()}")
+print(f"Dispersion only: {dispersion_only.sum()}")
+print(f"Two groups: {two_groups.sum()}")
+print(f"All three: {all_three.sum()}")
 
-# Save classified orbital data
 data.to_csv(
     folder / "Orbital_outlier_comparison.csv",
     index=False
 )
 
-# Save figure
 fig.savefig(
     folder / "Orbital_outlier_comparison.png",
     dpi=240,
