@@ -1,12 +1,21 @@
 Distribution description: 
+- Total of 157 data plots have been recorded.
 - There is a dense concentration around X= 5-10, Y = 0 kpc. 
-- Outside of the dense concentration shows a more sparsely populated outer region that extends to around X = -75kpc and Y = -80kpc
-- 
+- Outside of the dense concentration shows a more sparsely populated outer region that extends to around X = -75kpc and Y = -80kpc.
+Note: For the coordinate origin in the unmodified Harris coordinates that are placed at the galactic centre is at around (8,0) not (0,0)
 
 This shows evidence of a centrally concentrated population with an extended distribution.
 However this plot is a projection onto the galactic plane where Z is hidden. 
 
 For the 5 induvidual candidates:
 1. NGC 3201: This one lies close to the galactic plane with a modest negative result. 
-2. NGC 362
-3. NGC 1851
+2. NGC 362: Lies around 6.2 kpc below the plane and is around 1 Gyr younger for its metallicity. 
+3. NGC 1851: R_gc = 16.6 kpc and Z = -6.9 kpc making it further from the centre than the other two. 
+(I am struggling to find info on the remaining two, It is likely cause I inoccretly noted down their names)
+
+Question: Does age residual change with distance from the galactic centre?
+
+Limitations:
+- XY hides the vertical position
+- The present opsityions of the galactic clusters don't describe a full oribit
+- The distance itself cannot estabish accretion
