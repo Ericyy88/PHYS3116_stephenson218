@@ -1,0 +1,40 @@
+Investigation aim: Measuring the spread of stars' velcoities area within a cluster. 
+
+The overall aim of this investigation is to figure out how internal velcoity dispersion depend on cluster mass 
+and what clusters depart from the overall relationship?
+
+Relationship for the velocity dispersion and stellar mass of clusters:
+
+No. of clusters fitted: 157
+Fitted equation: This has been measured from the codes variables of y = log(10)(sig_v2), x = log(10)(Mstar), y = mx + b
+RMS residual: y = 0.915x + 1.122 this corresopnds to (sigma_v)^2 proportional to (M_asterix)^0.915
+
+- There is an overall upward trend
+- The more massive clusters generally have larger internal velocity dispersions.
+- A noteciable scatter is present and mass does not discribe every cluster equally well.
+
+For the residual graph:
+- The positive residuals are indicative of a greater dispersion that what has been predicted. 
+- The negative resiudals are indicative of a smaller dispersion.
+
+Small results from the 20 outliers:
+
+Cluster: NGC 5053. Residual: -0.919. Absoulte standarised residual: 2.75
+Cluster: NGC 5466. Residual: -0.893. Absolute standarised residual: 2.67
+Cluster: NGC 5024. Residual: -0.674. Abosulte standarised resiudal: 2.02
+
+The pattern shows 3 large negative departures. The largest positive departure occur at NGC 6441 and NGC 7078 which are both around +0.49 dex.
+Residual standard deviation := 0.334 dex.
+
+
+Physical interpretations:
+
+For similar sized bodies, greater masses would generally accomapy greater dispersion. 
+- At a fixed mass it can result in more extended clutsers having smaller dispersions. Refence: https://academic.oup.com/mnrasl/article/359/1/L1/1034826?utm_source=chatgpt.com
+The cluster sizes and concentrations can therefore be possible explanations for the investigated residuals 
+
+Limitations:
+
+- The measurement uncertainties are currently neither plotter nor used to weigh the fit
+- The fit includes mss yet omits cluser size and structure.
+- The internal velcoity disperstion itself cannot be enough to establish whether a cluster was accreted. 
