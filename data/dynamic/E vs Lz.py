@@ -29,14 +29,14 @@ import numpy as np
 # 1. Import datasets
 # --------------------------------------------------
 
-folder = Path(__file__).resolve().parent
+folder = Path(__file__).resolve().parent #finds folder containing Python file.
 
 data = pd.read_csv(
     folder / "orbital_energy_angular_momentum.csv"
 )
 
 age_outliers = pd.read_csv(
-    folder.parent.parent / "Age_outliers.csv"
+    folder.parent.parent / "Age_outliers.csv" #three outlier files are read from two folder levels above script.
 )
 
 velocity_outliers = pd.read_csv(
@@ -48,7 +48,7 @@ dispersion_outliers = pd.read_csv(
 )
 
 # Standardise cluster identifiers
-def standardise_id(series):
+def standardise_id(series): #cleans spacing, capitalisation and name spellings
     return (
         series.astype(str)
         .str.upper()
@@ -86,12 +86,12 @@ age_ids = set(age_outliers["match_id"])
 velocity_ids = set(velocity_outliers["match_id"])
 dispersion_ids = set(dispersion_outliers["match_id"])
 
-data["Age_outlier"] = data["match_id"].isin(age_ids)
+data["Age_outlier"] = data["match_id"].isin(age_ids) #these three flags show whether each cluster appears in each outlier list.
 data["Velocity_outlier"] = data["match_id"].isin(velocity_ids)
 data["Dispersion_outlier"] = data["match_id"].isin(dispersion_ids)
 
 # Number of outlier lists containing each cluster
-data["Outlier_count"] = (
+data["Outlier_count"] = (     #adds flags as 1s and 0s to count how many lists contain each cluster.
     data["Age_outlier"].astype(int)
     + data["Velocity_outlier"].astype(int)
     + data["Dispersion_outlier"].astype(int)
@@ -99,7 +99,7 @@ data["Outlier_count"] = (
 
 normal = data["Outlier_count"] == 0
 
-age_only = (
+age_only = (     #the three "only" categories below exclude clusters appearing in multiple lists.
     data["Age_outlier"]
     & (data["Outlier_count"] == 1)
 )
@@ -121,8 +121,9 @@ all_three = data["Outlier_count"] == 3
 # 3. Scale orbital variables
 # --------------------------------------------------
 
-data["Lz_scaled"] = data["Lz_kpc_km_s"] / 1000
-data["E_scaled"] = data["E_km2_s2"] / 100000
+data["Lz_scaled"] = data["Lz_kpc_km_s"] / 1000     #matches 10^3 scaling shown on the horizontal axis.
+data["E_scaled"] = data["E_km2_s2"] / 100000     #matches 10^5 scaling shown on the vertical axis.
+
 
 # --------------------------------------------------
 # 4. Plot orbital energy against angular momentum
@@ -130,7 +131,7 @@ data["E_scaled"] = data["E_km2_s2"] / 100000
 
 fig, ax = plt.subplots(figsize=(14, 9))
 
-groups = [
+groups = [     #each row chooses cluster selection, legend name, colour, marker and size.
     (normal, "Other clusters", "lightgray", "o", 30),
     (age_only, "Age-metallicity only", "royalblue", "o", 85),
     (velocity_only, "Velocity only", "tomato", "o", 85),
@@ -159,9 +160,9 @@ for mask, label, color, marker, size in groups:
 
 from adjustText import adjust_text
 
-texts = []
+texts = [] #collects name labels so adjust_text can move them together.
 
-outlier_data = data.loc[data["Outlier_count"] >= 1]
+outlier_data = data.loc[data["Outlier_count"] >= 1]     #adds names only for clusters found in at least one outlier list.
 
 for _, row in outlier_data.iterrows():
 
@@ -170,13 +171,13 @@ for _, row in outlier_data.iterrows():
         row["E_scaled"],
         row["ID"],
         fontsize=8,
-        fontweight="bold" if row["Outlier_count"] >= 2 else "normal",
+        fontweight="bold" if row["Outlier_count"] >= 2 else "normal",     #makes names bold when a cluster appears in two or three lists.
         zorder=6
     )
 
     texts.append(txt)
 
-adjust_text(
+adjust_text(     #moves labels to reduce overlap and connects them to their points.
     texts,
     ax=ax,
     arrowprops=dict(
@@ -260,19 +261,19 @@ print(
 )
 
 print("\nNumber of clusters in each category:")
-print(f"Normal: {normal.sum()}")
+print(f"Normal: {normal.sum()}")     #.sum() counts True entries in each category.
 print(f"Age only: {age_only.sum()}")
 print(f"Velocity only: {velocity_only.sum()}")
 print(f"Dispersion only: {dispersion_only.sum()}")
 print(f"Two groups: {two_groups.sum()}")
 print(f"All three: {all_three.sum()}")
 
-data.to_csv(
+data.to_csv(     #saves orbital values together with outlier flags and counts.
     folder / "Orbital_outlier_comparison.csv",
     index=False
 )
 
-fig.savefig(
+fig.savefig(     #saves completed graph as PNG image.
     folder / "Orbital_outlier_comparison.png",
     dpi=240,
     bbox_inches="tight"
