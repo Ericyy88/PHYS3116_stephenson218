@@ -31,8 +31,8 @@ predicted_mass = m * data["log_M"] + b                   #predicted ages based o
 residual = data["log_sig_v2"] - predicted_mass                #calculating residuals
 fig2, ax2 = plt.subplots(figsize=(8, 5))    
 ax2.errorbar(data["log_M"], residual, fmt="o", markersize=4, capsize=3, color="navy", ecolor="lightgray", elinewidth=1)
-ax2.set_xlabel("Log10(Stellar Mass)")
-ax2.set_ylabel("Log10(Velocity Dispersion Squared)")
+ax2.set_xlabel(r"$\log_{10}(M_\star/M_\odot)$")
+ax2.set_ylabel(r"$\log_{10}(\sigma_v^2/(\mathrm{km/s})^2)$ - Predicted")
 ax2.set_title("Residuals of Velocity Dispersion vs Stellar Mass")
 ax2.grid(alpha=0.25)
 ax2.axhline(0)
@@ -60,13 +60,34 @@ sig_v_outliers[["ID"]].to_csv(
 
 
 fig, ax = plt.subplots(figsize=(8, 5))
-ax.scatter(data["log_M"], data["log_sig_v2"], color="navy", s=20, alpha=0.7)
-ax.set_xlabel("Stellar Mass (Solar Masses)")
-ax.set_ylabel("Velocity Dispersion Squared (km/s)^2")
+
+# Scatter plot
+ax.scatter(
+    data["log_M"],
+    data["log_sig_v2"],
+    color="navy",
+    s=20,
+    alpha=0.7
+)
+
+# Regression line
+x_fit = np.linspace(data["log_M"].min(), data["log_M"].max(), 200)
+y_fit = m * x_fit + b
+
+ax.plot(
+    x_fit,
+    y_fit,
+    color="navy",
+    linewidth=2,
+    label=f"Linear fit: y = {m:.3f}x + {b:.3f}"
+)
+
+ax.set_xlabel(r"$\log_{10}(M_\star/M_\odot)$")
+ax.set_ylabel(r"$\log_{10}(\sigma_v^2/(\mathrm{km/s})^2)$")
 ax.set_title("Velocity Dispersion vs Stellar Mass of Clusters")
-ax.grid(alpha = 0.25)
 
-
+ax.grid(alpha=0.25)
+ax.legend()
 
 plt.show()
 
