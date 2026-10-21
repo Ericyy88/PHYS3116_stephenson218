@@ -1,3 +1,24 @@
+"""Plot published orbital energy against angular momentum for Harris clusters.
+
+Save orbital_energy_angular_momentum.csv beside this Python file, then run it.
+Requires pandas and matplotlib.
+
+Orbital source: De Leo et al. (2026), A&A 706, A130, Table C.1.
+Paper DOI: https://doi.org/10.1051/0004-6361/202556235
+Catalogue: https://cdsarc.cds.unistra.fr/ftp/J/A+A/706/A130/tablec1.dat
+Column definitions: https://cdsarc.cds.unistra.fr/ftp/J/A+A/706/A130/ReadMe
+
+The accompanying CSV matches published values to the uploaded Harris Part I.
+Matches use cluster IDs, equivalent Ter/Terzan and Djor/Djorg spellings, and
+Harris alternate names. The orbital_ID column preserves the source identifier.
+152 of 157 Harris clusters match; Ko 1, Ko 2, BH 176, GLIMPSE01 and GLIMPSE02
+have no matching entry and are excluded.
+
+E is specific orbital energy in km^2/s^2, and Lz is specific angular momentum
+in kpc km/s. This catalogue defines negative Lz as prograde and positive Lz
+as retrograde. Values depend on the Galactic potential adopted by the authors.
+The rotating bar means E and Lz need not be constant along an orbit.
+"""
 from pathlib import Path
 
 import matplotlib.pyplot as plt
